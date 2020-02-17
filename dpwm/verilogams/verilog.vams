@@ -1,0 +1,42 @@
+//Verilog-AMS HDL for "Silva_Buck", "dpwm" "verilogams"
+
+`include "constants.vams"
+`include "disciplines.vams"
+
+//`timescale 100ps/1ps
+
+`timescale 1fs/1fs
+
+module dpwm (d, pwm, clk, rst);
+
+	parameter integer bits = 8;		// resolution (bits)
+	
+	input signed [bits-1:0] d;
+	output pwm;
+	input clk, rst;
+	reg pwm;
+	reg signed [bits-1:0] counter;
+	reg clk_count;
+
+	// N bit -> 2^N * 1MHz 
+	//parameter real CLK_COUNT = 125; // 8MHz -> 125 ns
+	real CLK_COUNT = 3906250; // 256MHz -> 3906250 fs
+	
+
+	initial begin
+		pwm = 0;
+		clk_count = 0;
+		counter = -128;
+	end
+
+	always begin 
+		#(CLK_COUNT/2) clk_count = ~clk_count;
+	end
+
+	always @(posedge clk_count) begin
+		if (d > counter ) pwm <= 1;
+		else	 pwm <= 0;	
+		counter <= counter + 1;
+	end
+
+endmodule

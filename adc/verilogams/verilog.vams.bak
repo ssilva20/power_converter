@@ -1,0 +1,41 @@
+//Verilog-AMS HDL for "Silva_Buck", "adc" "verilogams"
+
+`include "constants.vams"
+`include "disciplines.vams"
+
+`timescale 1ns/1ps
+module adc (in, e, clk, rst);
+
+	parameter integer bits = 8;		// resolution (bits)
+	parameter real vref = 2.7;		// reference voltage (V)
+	parameter real vdelta = 1.4;//280m;	    // output voltage range (V)
+	parameter real levels = 9;     	// number of output voltage thresholds (odd)
+	parameter real td = 0;			// delay from clock to output (ns)
+	
+	input in, clk, rst;
+	electrical in;
+	output signed [bits-1:0] e;
+	reg signed [bits-1:0] e;
+	reg over;
+	real sample;
+	real vq;
+	real min_e;
+	real i;
+
+	initial begin 
+		e = 0;
+		over = 0;
+	end
+
+	always @(posedge clk) begin
+		sample = V(in);
+		min_e = -1*(levels-1)/2;
+		e = $rtoi(min_e);
+		vq = vdelta/(levels-2);
+		for (i=0; i<=levels-2; i=i+1) begin
+			over = (vref - vdelta/2 + i*vq - sample > 0);
+			if (over) e=e+1;
+		end	
+	end
+endmodule
+

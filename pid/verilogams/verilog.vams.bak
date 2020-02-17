@@ -1,0 +1,75 @@
+//Verilog-AMS HDL for "Silva_Buck", "pid" "verilogams"
+
+`include "constants.vams"
+`include "disciplines.vams"
+
+
+`timescale 1ms/1ps
+module pid (e, d, clk, rst);
+
+	parameter integer bits = 8;		// resolution (bits)
+	parameter real kp = 0.5*12.5;			// proportional gain
+	parameter real ki = 0.5*23.5;			// integral gain
+	parameter real kd = 0.5*11.5;			// derivative gain
+
+	input signed [bits-1:0] e;	
+	input clk, rst;
+	output signed [bits-1:0] d;
+	//reg signed [bits-1:0] d;
+	
+	reg signed [bits-1:0] d_prev;
+	reg signed [bits-1:0] e_prev;
+	reg signed [bits-1:0] e_prev2;
+	reg signed [bits-1:0] d_next;
+	
+	reg signed [bits-1:0] comp;
+	integer max_d;
+	integer min_d;
+
+	integer hold;
+
+	initial begin
+		e_prev = 0;
+		e_prev2 = 0;
+		comp = 0;
+		max_d = 2**(bits-1)-1;
+		min_d = -2**(bits-1);
+		//d = min_d;
+		d_prev = min_d;
+
+		hold = 0;
+	end
+
+	always @ (posedge clk) begin
+
+		if (hold == 0) begin
+			e_prev2 <= e_prev;
+			e_prev <= e;
+			d_prev <= d;
+		end
+
+		/*
+		comp = kp*e - ki*e_prev + kd*e_prev2;
+		d_next = d_prev + comp;
+
+		if (d_prev >= 0 && comp > 0 && d_next <= 0) d = max_d;
+		else if (d_prev <= 0 && comp < 0 && d_next >= 0) d = min_d;
+		else d = d_next;*/
+	end
+
+	//assign d = d_prev + kp*e - ki*e_prev + kd*e_prev2;
+	assign d = (hold == 1) ? max_d : d_prev + kp*e - ki*e_prev + kd*e_prev2;
+	//assign d = 11;
+
+	/*
+	always comb begin
+		comp = kp*(e - ki*e_prev + kd*e_prev2);
+		d_next = d_prev + comp;
+
+		// dpwm limit 
+		if (d_prev >= 0 && comp > 0 && d_next <= 0) d = max_d;
+		else if (d_prev <= 0 && comp < 0 && d_next >= 0) d = min_d;
+		else d = d_next;
+	end*/
+	
+endmodule

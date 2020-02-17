@@ -1,0 +1,25 @@
+//Revision 9
+//NOTE
+// Default template for spectre
+// Note:
+//      Please remember to replace Top Cell Library, Cell, and View
+//      fields with the actual names used by your design.
+//END_NOTE
+
+config buck_tb;
+design Silva_Buck.buck_tb:schematic;
+liblist myLib;
+
+viewlist spectre, cmos_sch, \cmos.sch , schematic, veriloga, ahdl, pspice;
+stoplist spectre;
+
+
+cell Silva_Buck.adc binding :verilogams;
+cell Silva_Buck.buck binding :verilogams;
+cell Silva_Buck.clk binding :verilogams;
+cell Silva_Buck.dpwm binding :verilogams;
+cell Silva_Buck.pid binding :verilogams;
+cell Silva_Buck.load binding :verilogams;
+
+
+endconfig
