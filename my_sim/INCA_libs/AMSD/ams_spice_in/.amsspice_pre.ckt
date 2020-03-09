@@ -1,0 +1,10 @@
+myopt options rawfmt=psfbin
+simulator lang=spectre
+include "scf.scs"   topfile=1  
+
+subckt _ski_plugin_amspice_dummy_1583789192_
+                 r1 (a b )resistor r=1k 
+                 v1 (a b )vsource dc=1 
+                 ends 
+                 _ski_plugin_amspice_dummy_1583789192_ _ski_plugin_amspice_dummy_1583789192_
+opt_1583789192 options save=nooutput

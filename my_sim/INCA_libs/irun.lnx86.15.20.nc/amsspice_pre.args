@@ -1,0 +1,21 @@
+//
+// File created by:  ncverilog
+// Do not modify this file
+//
+-outdir
+./INCA_libs/AMSD/ams_spice_in
+-runmode
+-cdslib
+./INCA_libs/irun.lnx86.15.20.nc/cdsrun.lib
+-hdlvar
+./INCA_libs/irun.lnx86.15.20.nc/hdlrun.var
+-work
+worklib
+-32bit
+-amscommfile
+./INCA_libs/AMSD/ams_spice_in/amscomm.list
+-amsspice-errfile
+./INCA_libs/AMSD/ams_spice_in/amsspice_pre.log
+-dumpprim
+-amsi
+./scf.scs

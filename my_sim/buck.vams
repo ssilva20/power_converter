@@ -1,1 +1,46 @@
-../buck/verilogams/verilog.vams
+//Verilog-AMS HDL for "Silva_Buck", "buck" "verilogams"
+
+`include "constants.vams"
+`include "disciplines.vams"
+
+module buck (pwm,vout);
+	input pwm;
+	output vout;
+	electrical vout;
+	electrical vin;	
+	electrical n1, n2;
+	electrical IL, IC;
+ 
+	parameter real VIN = 5;
+	parameter real L = 1u;
+	parameter real C = 22u;
+	parameter real ESR = 0;
+	parameter real DCR = 0;
+	parameter real tr = 100p;
+	real switch;
+	
+	always @(pwm) begin
+		if (pwm == 1'b1) switch = 1;
+		else switch = 0;
+	end
+
+	analog begin
+		if (analysis("ic"))
+			I(n1,vout) <+ 0;
+		else
+			V(n1,vout) <+ L*ddt(I(n1,vout));
+
+		if (analysis("ic"))
+			V(n2) <+ 0;
+		else
+			I(n2) <+ C*ddt(V(n2));
+
+		V(vin) <+ transition(VIN*switch,0,tr,tr);
+		V(vin,n1) <+ DCR*I(vin,n1);
+		V(vout,n2) <+ ESR*I(vout,n2);
+
+		V(IL) <+ I(n1,vout);
+		V(IC) <+ I(vout,n2);
+	end
+
+endmodule

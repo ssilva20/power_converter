@@ -1,1 +1,59 @@
-../pid/verilogams/verilog.vams
+//Verilog-AMS HDL for "Silva_Buck", "pid" "verilogams"
+
+`include "constants.vams"
+`include "disciplines.vams"
+
+
+`timescale 1ns/1ps
+module pid (e, d, clk, rst);
+
+	parameter integer bits = 8;		// resolution (bits)
+	parameter real kp = 12.5;			// proportional gain
+	parameter real ki = 23.5;			// integral gain
+	parameter real kd = 11.5;			// derivative gain
+
+	input signed [bits-1:0] e;	
+	input clk, rst;
+	output signed [bits-1:0] d;
+	//reg signed [bits-1:0] d;
+	
+	reg signed [bits-1:0] d_prev;
+	reg signed [bits-1:0] d_prev2;
+	reg signed [bits-1:0] e_prev;
+	reg signed [bits-1:0] e_prev2;
+	reg signed [bits-1:0] d_next;
+	
+	reg signed [bits-1:0] comp;
+	integer max_d;
+	integer min_d;
+
+	integer hold;
+	integer reset;
+
+	initial begin
+		e_prev = 0;
+		e_prev2 = 0;
+		comp = 0;
+		max_d = 2**(bits-1)-1;
+		min_d = -2**(bits-1);
+		//d = min_d;
+		d_prev = min_d;
+		d_prev2 = min_d;
+		hold = 0;
+		reset = 0;
+		hold = #(5000000) 0;   // Set to 1 for prediction
+		hold = #(1125) 0;
+	end
+
+	always @ (posedge clk) begin
+		if (hold == 0) begin
+			e_prev2 <= e_prev;
+			e_prev <= e;
+			d_prev2 <= d_prev;
+			d_prev <= d;
+		end
+	end
+
+	assign d = (hold == 0) ? d_prev + kp*e - ki*e_prev + kd*e_prev2 : max_d; 
+	
+endmodule

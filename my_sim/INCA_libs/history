@@ -1,0 +1,5 @@
+//
+// File created by:  irun
+// Do not modify this file
+
+s1::(09Mar2020:16:26:31):( ncverilog buck_model.vams -top buck_model -analogcontrol scf.scs )

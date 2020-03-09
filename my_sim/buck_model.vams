@@ -1,1 +1,42 @@
-../buck_model/verilogams/verilog.vams
+//Verilog-AMS HDL for "Silva_Buck", "buck_model" "verilogams"
+
+`include "constants.vams"
+`include "disciplines.vams"
+`include "clk.vams"
+`include "buck.vams"
+`include "adc.vams"
+`include "dpwm.vams"
+`include "pid.vams"
+`include "load.vams"
+
+`timescale 1us/1ps
+
+module buck_model ();
+  // Top Level Signals
+  wire _l_clk, _l_rst, _l_pwm;
+  wire [7:0] _l_e, _l_d;
+  electrical _v_out;
+
+
+  // Gem5 Interface Signals
+  real _v_vset, _i_last;
+  real _v_next;
+
+  // Modules
+  clk _clk(.clk(_l_clk), .rst(_l_rst));
+  adc _adc(.clk(_l_clk), .rst(_l_rst), .e(_l_e), .in(_v_out));
+  pid _pid(.clk(_l_clk), .rst(_l_rst), .e(_l_e), .d(_l_d));
+  dpwm _dpwm(.clk(_l_clk), .rst(_l_rst), .d(_l_d), .pwm(_l_pwm));
+  buck _buck(.pwm(_l_pwm), .vout(_v_out));
+  load _load(.clk(_l_clk), .rst(_l_rst), .vdd(_v_out));
+
+  analog begin
+    _v_next = V(_v_out);
+  end
+
+  initial begin
+    repeat(10000) #1 $display("%d,%f", $time, _v_next);
+    $finish;
+  end
+
+endmodule

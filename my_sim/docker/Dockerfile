@@ -3,6 +3,7 @@ FROM centos:7.7.1908
 MAINTAINER "Andrew Smith <atsmith3@illinois.edu>"
 
 ARG user="andrew"
+ARG wd="/home/andrew/research/power_converter/my_sim"
 
 RUN yum -y update 
 
@@ -17,4 +18,4 @@ RUN useradd -rm -d /home/${user} -s /bin/bash -g root -G sim -u 1000 ${user}
 RUN mkdir -p /run_vsim
 RUN chown ${user} /run_vsim
 
-WORKDIR /home/andrew/research/power_converter/my_sim
+WORKDIR ${wd}

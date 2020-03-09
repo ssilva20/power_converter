@@ -1,0 +1,10 @@
+ncverilog: 15.20-s008: (c) Copyright 1995-2016 Cadence Design Systems, Inc.
+TOOL:	ncverilog	15.20-s008: Started on Mar 09, 2020 at 16:26:31 CDT
+ncverilog
+	buck_model.vams
+	-top
+	buck_model
+	-analogcontrol
+	scf.scs
+ncverilog: *E,SPCERR: The program encountered one or more errors while processing the input SPICE file(s) in the AMSD flow. For details, see the following messages.
+TOOL:	ncverilog	15.20-s008: Exiting on Mar 09, 2020 at 16:26:34 CDT  (total: 00:00:03)
