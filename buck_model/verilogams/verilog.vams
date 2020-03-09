@@ -1,0 +1,8 @@
+//Verilog-AMS HDL for "Silva_Buck", "buck_model" "verilogams"
+
+`include "constants.vams"
+`include "disciplines.vams"
+
+module buck_model ( );
+
+endmodule

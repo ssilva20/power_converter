@@ -6,11 +6,11 @@
 LockStakeVersion               1.1
 LoginName                      ssilva20
 HostName                       csl-401-04.csl.illinois.edu
-ProcessIdentifier              31980
-ProcessCreationTime_UTC        1581004995
-ProcessCreationTime_Readable   Thu Feb  6 10:03:15 2020 CST
+ProcessIdentifier              11170
+ProcessCreationTime_UTC        1583287403
+ProcessCreationTime_Readable   Tue Mar  3 20:03:23 2020 CST
 AppIdentifier                  OA File System Design Manager
 OSType                         unix
 ReasonForPlacingEditLock       OpenAccess edit lock
 FilePathUsedToEditLock         /data/shared/hanumolu/Project/Design_IC6/t65hswline17/ssilva20/Silva_Buck/buck_tb/schematic/sch.oa.cdslck
-TimeEditLocked                 Thu Feb  6 10:03:27 2020 CST
+TimeEditLocked                 Tue Mar  3 20:05:26 2020 CST

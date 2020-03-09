@@ -9,7 +9,7 @@
 
 module dpwm (d, pwm, clk, rst);
 
-	parameter integer bits = 8;		// resolution (bits)
+	parameter integer bits = 8;		
 	
 	input signed [bits-1:0] d;
 	output pwm;
@@ -34,7 +34,7 @@ module dpwm (d, pwm, clk, rst);
 	end
 
 	always @(posedge clk_count) begin
-		if (d > counter ) pwm <= 1;
+		if (d+1 > counter ) pwm <= 1;
 		else	 pwm <= 0;	
 		counter <= counter + 1;
 	end

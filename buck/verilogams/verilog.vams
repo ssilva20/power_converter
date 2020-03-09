@@ -9,9 +9,10 @@ module buck (pwm,vout);
 	electrical vout;
 	electrical vin;	
 	electrical n1, n2;
+	electrical IL, IC;
  
 	parameter real VIN = 5;
-	parameter real L = 200n;
+	parameter real L = 1u;
 	parameter real C = 22u;
 	parameter real ESR = 0;
 	parameter real DCR = 0;
@@ -37,6 +38,9 @@ module buck (pwm,vout);
 		V(vin) <+ transition(VIN*switch,0,tr,tr);
 		V(vin,n1) <+ DCR*I(vin,n1);
 		V(vout,n2) <+ ESR*I(vout,n2);
+
+		V(IL) <+ I(n1,vout);
+		V(IC) <+ I(vout,n2);
 	end
 
 endmodule

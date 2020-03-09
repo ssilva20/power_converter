@@ -7,8 +7,8 @@
 module adc (in, e, clk, rst);
 
 	parameter integer bits = 8;		// resolution (bits)
-	parameter real vref = 2.7;		// reference voltage (V)
-	parameter real vdelta = 1.4;//280m;	    // output voltage range (V)
+	parameter real vref = 1;		// reference voltage (V)
+	parameter real vdelta = 40m;	    // output voltage range (V)
 	parameter real levels = 9;     	// number of output voltage thresholds (odd)
 	parameter real td = 0;			// delay from clock to output (ns)
 	

@@ -8,14 +8,13 @@ module load (vdd, clk, rst);
 	input vdd, clk, rst;
 	electrical vdd;
 	
-	
-	parameter real Vout = 2.7;
-	parameter real I1 = 300m;
-	parameter real I2 = 1;
+	parameter real Vout = 1;
+	parameter real I1 = 0.5;
+	parameter real I2 = 5;
 	parameter real tr = 100p;
 
-
 	real R;
+	real Iout;
 
 	initial begin
 		R = Vout/I1;

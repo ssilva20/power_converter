@@ -4,13 +4,13 @@
 `include "disciplines.vams"
 
 
-`timescale 1ms/1ps
+`timescale 1ns/1ps
 module pid (e, d, clk, rst);
 
 	parameter integer bits = 8;		// resolution (bits)
-	parameter real kp = 0.5*12.5;			// proportional gain
-	parameter real ki = 0.5*23.5;			// integral gain
-	parameter real kd = 0.5*11.5;			// derivative gain
+	parameter real kp = 12.5;			// proportional gain
+	parameter real ki = 23.5;			// integral gain
+	parameter real kd = 11.5;			// derivative gain
 
 	input signed [bits-1:0] e;	
 	input clk, rst;
@@ -18,6 +18,7 @@ module pid (e, d, clk, rst);
 	//reg signed [bits-1:0] d;
 	
 	reg signed [bits-1:0] d_prev;
+	reg signed [bits-1:0] d_prev2;
 	reg signed [bits-1:0] e_prev;
 	reg signed [bits-1:0] e_prev2;
 	reg signed [bits-1:0] d_next;
@@ -27,6 +28,7 @@ module pid (e, d, clk, rst);
 	integer min_d;
 
 	integer hold;
+	integer reset;
 
 	initial begin
 		e_prev = 0;
@@ -36,8 +38,11 @@ module pid (e, d, clk, rst);
 		min_d = -2**(bits-1);
 		//d = min_d;
 		d_prev = min_d;
-
+		d_prev2 = min_d;
 		hold = 0;
+		reset = 0;
+		hold = #(5000000) 1;
+		hold = #(1125) 0;
 	end
 
 	always @ (posedge clk) begin
@@ -45,11 +50,11 @@ module pid (e, d, clk, rst);
 		if (hold == 0) begin
 			e_prev2 <= e_prev;
 			e_prev <= e;
+			d_prev2 <= d_prev;
 			d_prev <= d;
 		end
 
-		/*
-		comp = kp*e - ki*e_prev + kd*e_prev2;
+		/*comp = kp*e - ki*e_prev + kd*e_prev2;
 		d_next = d_prev + comp;
 
 		if (d_prev >= 0 && comp > 0 && d_next <= 0) d = max_d;
@@ -57,19 +62,10 @@ module pid (e, d, clk, rst);
 		else d = d_next;*/
 	end
 
+	
 	//assign d = d_prev + kp*e - ki*e_prev + kd*e_prev2;
-	assign d = (hold == 1) ? max_d : d_prev + kp*e - ki*e_prev + kd*e_prev2;
-	//assign d = 11;
-
-	/*
-	always comb begin
-		comp = kp*(e - ki*e_prev + kd*e_prev2);
-		d_next = d_prev + comp;
-
-		// dpwm limit 
-		if (d_prev >= 0 && comp > 0 && d_next <= 0) d = max_d;
-		else if (d_prev <= 0 && comp < 0 && d_next >= 0) d = min_d;
-		else d = d_next;
-	end*/
+	assign d = (hold == 0) ? d_prev + kp*e - ki*e_prev + kd*e_prev2 : max_d; 
+//	assign d = 0.9206*d_prev + 0.0794*d_prev2 + 53.4642*e - 95.3693*e_prev + 42.4108*e_prev2;
+	
 	
 endmodule

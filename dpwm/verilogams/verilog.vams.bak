@@ -10,42 +10,33 @@
 module dpwm (d, pwm, clk, rst);
 
 	parameter integer bits = 8;		// resolution (bits)
+	
 	input signed [bits-1:0] d;
 	output pwm;
 	input clk, rst;
-
 	reg pwm;
 	reg signed [bits-1:0] counter;
 	reg clk_count;
 
 	// N bit -> 2^N * 1MHz 
 	//parameter real CLK_COUNT = 125; // 8MHz -> 125 ns
+	real CLK_COUNT = 3906250; // 256MHz -> 3906250 fs
 	
-	parameter real CLK_COUNT = 3906250; // 256MHz -> 3906250 fs
-
-	integer start_count = 0;
 
 	initial begin
 		pwm = 0;
 		clk_count = 0;
 		counter = -128;
-		start_count = 0;
-		
 	end
 
 	always begin 
 		#(CLK_COUNT/2) clk_count = ~clk_count;
 	end
 
-	always @(posedge clk) begin
-		start_count = 1;
-	end
-
 	always @(posedge clk_count) begin
-		if (d > counter ) pwm <= 1;
+		if (d+1 > counter ) pwm <= 1;
 		else	 pwm <= 0;	
 		counter <= counter + 1;
 	end
-	
 
 endmodule
